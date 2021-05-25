@@ -83,3 +83,7 @@ const privateVariable = "Private"
 Go 言語のテストコードファイルは、対象のファイル名に`_test`のサフィックスつける。
 
 `sample.go` -> `sample_test.go`
+
+# 参考
+
+https://pod.hatenablog.com/entry/2018/12/26/074944
