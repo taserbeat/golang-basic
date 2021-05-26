@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"main/test"
 	"math"
+	"math/rand"
 	"time"
 )
 
@@ -35,5 +36,21 @@ func main() {
 	// 小数点以下を切り捨てる
 	fmt.Println(math.Trunc(3.14))  // 3
 	fmt.Println(math.Trunc(-3.14)) // -3
+
+	/* randパッケージ */
+	// 乱数生成器にシードを設定
+	rand.Seed(256)
+
+	// 乱数を生成
+	fmt.Println(rand.Float64()) // 0.813527291469711
+	fmt.Println(rand.Float64()) // 0.5598026045235738
+	fmt.Println(rand.Float64()) // 0.6695717783859498
+
+	// 現在の時刻をシードに使った疑似乱数の生成
+	rand.Seed(time.Now().UnixNano())
+
+	fmt.Println(rand.Int())     // int型の疑似乱数
+	fmt.Println(rand.Intn(100)) // 0 ~ 99のint型疑似乱数
+	fmt.Println(rand.Int63())   // int64型の疑似乱数
 
 }
