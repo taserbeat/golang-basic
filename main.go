@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -96,5 +97,15 @@ func main() {
 	// 文字列 -> floatの変換
 	floatFromStr1, _ := strconv.ParseFloat("3.14", 64)
 	fmt.Printf("%v, %T\n", floatFromStr1, floatFromStr1)
+
+	/* stringsパッケージ */
+	// 文字列を結合する
+	fruits := strings.Join([]string{"banana", "watermelon", "apple"}, ", ")
+	fmt.Println(fruits) // "banana, watermelon, apple"
+
+	// 文字列に含まれる部分文字列を検索する
+	index1 := strings.Index("ABCDEF", "C")
+	index2 := strings.Index("ABCABC", "C")
+	fmt.Println(index1, index2) // 2 2
 
 }
