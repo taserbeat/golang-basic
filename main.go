@@ -7,6 +7,7 @@ import (
 	"math"
 	"math/rand"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -64,4 +65,36 @@ func main() {
 	// loggerの作成
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime|log.Lshortfile)
 	logger.Println("message")
+
+	/* strconvパッケージ */
+	// 整数 -> 文字列にの変換
+	strFromInt1 := strconv.FormatInt(-100, 10)
+	fmt.Printf("%v, %T\n", strFromInt1, strFromInt1)
+
+	// もっと簡単にint -> stringの変換ができる
+	strFromInt2 := strconv.Itoa(100)
+	fmt.Printf("%v, %T\n", strFromInt2, strFromInt2)
+
+	// 文字列 ->boolの変換
+	boolFromStr1, _ := strconv.ParseBool("true")
+	fmt.Printf("%v, %T\n", boolFromStr1, boolFromStr1)
+
+	boolFromStr2, ok := strconv.ParseBool("false")
+	if ok != nil {
+		fmt.Println("Convert Error")
+	}
+	fmt.Printf("%v, %T\n", boolFromStr2, boolFromStr2)
+
+	// 文字列 -> intの変換
+	intFromStr1, _ := strconv.ParseInt("12345", 10, 0) // 第3引数でint型の精度を指定する。0の場合はGoのint型の精度が設定される。
+	fmt.Printf("%v, %T\n", intFromStr1, intFromStr1)
+
+	// もっと簡単に文字列 -> intの変換ができる
+	intFromStr2, _ := strconv.Atoi("123")
+	fmt.Printf("%v, %T\n", intFromStr2, intFromStr2)
+
+	// 文字列 -> floatの変換
+	floatFromStr1, _ := strconv.ParseFloat("3.14", 64)
+	fmt.Printf("%v, %T\n", floatFromStr1, floatFromStr1)
+
 }
