@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"main/test"
 	"math"
 	"math/rand"
+	"os"
 	"time"
 )
 
@@ -53,4 +55,13 @@ func main() {
 	fmt.Println(rand.Intn(100)) // 0 ~ 99のint型疑似乱数
 	fmt.Println(rand.Int63())   // int64型の疑似乱数
 
+	/* logパッケージ */
+	// ログの出力先を標準出力に変更
+	log.SetOutput(os.Stdout)
+
+	log.Println("this is log.")
+
+	// loggerの作成
+	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime|log.Lshortfile)
+	logger.Println("message")
 }
