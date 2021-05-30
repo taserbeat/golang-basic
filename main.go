@@ -197,4 +197,13 @@ func main() {
 	fmt.Println(re8.MatchString("ABC"))        // false
 	fmt.Println(re8.MatchString("あ"))          // true
 
+	// 正規表現にマッチした文字列の取得
+	re9 := regexp.MustCompile(`(abc|ABC)(xyz|XYZ)`)
+
+	fs1 := re9.FindString("AAAABCXYZZZZ")
+	fmt.Println(fs1) // ABCXYZ
+
+	fs2 := re9.FindAllString("ABCXYZABCXYZ", -1) // 第2引数で取得する文字列スライスの数を指定する。-1を指定するとマッチした全てを取得する。
+	fmt.Println(fs2)                             // [ABCXYZ ABCXYZ]
+
 }
