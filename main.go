@@ -7,6 +7,7 @@ import (
 	"math"
 	"math/rand"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -107,5 +108,93 @@ func main() {
 	index1 := strings.Index("ABCDEF", "C")
 	index2 := strings.Index("ABCABC", "C")
 	fmt.Println(index1, index2) // 2 2
+
+	/* regexpパッケージ */
+	// Goの正規表現の基本
+	match, _ := regexp.MatchString("A", "ABC")
+	fmt.Println(match) // true
+
+	// Compile
+	re1, _ := regexp.Compile("A")
+	match = re1.MatchString("ABC")
+	fmt.Println(match) // true
+
+	// MustCompile
+	re2 := regexp.MustCompile("A")
+	match = re2.MatchString("BCD")
+	fmt.Println(match) // false
+
+	// 正規表現のフラグ
+	/*
+		フラグオプション一覧
+
+		i 大文字小文字を区別しない
+		m マルチラインモード(^と&が文頭、文末に加えて行頭、行末にマッチ)
+		s .が\nにマッチ
+		U 最小マッチへの変換 (xxはx+?へ、x+はx+?へ)
+	*/
+
+	re3 := regexp.MustCompile(`(?i)abc`) // (?)にフラグオプションをつけることで正規表現のルールを適用できる
+	match = re3.MatchString("ABC")
+	fmt.Println(match) // true
+
+	// 幅を持たない正規表現のパターン
+	/*
+		パターン一覧
+
+		^ 文頭 (mフラグが有効な場合は行頭にも)
+		$ 文末 (mフラグが有効な場合は行頭にも)
+		\A 文頭
+		\z 文末
+		\b ASCIIに夜ワード協会
+		\B 非ASCIIによるワード協会
+
+	*/
+
+	re4 := regexp.MustCompile(`^ABC$`)
+	match = re4.MatchString("ABC")
+	fmt.Println(match) // true
+
+	match = re4.MatchString("   ABC   ")
+	fmt.Println(match) // false
+
+	// 繰り返しを表す正規表現
+	/*
+		繰り返しのパターン
+
+		x* 0回以上繰り返すx (最大マッチ)
+		x+ 1回以上繰り返すx (最大マッチ)
+		x? 0回以上1回以下繰り返すx
+		x{n,m} n回以上m回以下繰り返すx (最大マッチ)
+		x{n, } n回以上繰り返すx (最大マッチ)
+		x{n} n回繰り返すx (最大マッチ)
+
+		x*? 0回以上繰り返すx (最小マッチ)
+		x+? 1回以上繰り返すx (最小マッチ)
+		x?? 0回以上1回以下繰り返すx (0回優先)
+		x{n,m}? n回以上m回以下繰り返す (最小マッチ)
+		x{n, }? n回以上繰り返すx (最小マッチ)
+		x{n}? n回繰り返すx (最小マッチ)
+	*/
+
+	re5 := regexp.MustCompile("a+b*")
+	fmt.Println(re5.MatchString("a"))  // true
+	fmt.Println(re5.MatchString("b"))  // false
+	fmt.Println(re5.MatchString("ab")) // true
+	fmt.Println(re5.MatchString("aa")) // true
+	fmt.Println(re5.MatchString("bb")) // false
+
+	// 正規表現の文字クラス
+	re6 := regexp.MustCompile(`[XYZ]`)
+	fmt.Println(re6.MatchString("Y")) // true
+	fmt.Println(re6.MatchString("V")) // false
+
+	re7 := regexp.MustCompile(`^[0-9A-Za-z_]{3}$`) // 英数字と_に3回マッチする
+	fmt.Println(re7.MatchString("ABC"))            // true
+	fmt.Println(re7.MatchString("abcdefg"))        // false
+
+	re8 := regexp.MustCompile(`[^0-9A-Za-z_]`) // 英数字と_以外にマッチする
+	fmt.Println(re8.MatchString("ABC"))        // false
+	fmt.Println(re8.MatchString("あ"))          // true
 
 }
