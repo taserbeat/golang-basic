@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/md5"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -15,7 +16,35 @@ import (
 	"time"
 )
 
-// テスト
+// json
+type A struct {
+}
+
+type User struct {
+	Id        int       `json:"id"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email"`
+	CreatedAt time.Time `json:"createdAt"`
+	A         A         `json:"A"`
+}
+
+func (user User) CustomMarshalJson() ([]byte, error) {
+	v, err := json.Marshal(&struct {
+		Id        int
+		Name      string
+		Email     string
+		CreatedAt time.Time
+		A         A
+	}{
+		Id:        user.Id,
+		Name:      "Mr " + user.Name,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt,
+		A:         user.A,
+	})
+
+	return v, err
+}
 
 func main() {
 	fmt.Println(test.IsOne(1))
@@ -219,5 +248,38 @@ func main() {
 
 	hashHex := fmt.Sprintf("%x", hashGen.Sum(nil)) // ハッシュ値のバイト配列 -> 16進数の文字列を得る
 	fmt.Println(hashHex)                           // 2ecdde3959051d913f61b14579ea136d
+
+	/* json */
+
+	user1 := User{
+		Id:        1,
+		Name:      "John",
+		Email:     "john@example.com",
+		CreatedAt: time.Now(),
+	}
+
+	// marshal: 構造体からJSONに変換
+	jsonBs, err := json.Marshal(user1)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// {"id":1,"name":"John","email":"john@example.com","createdAt":"2021-05-30T17:10:21.824778+09:00","A":{}}
+	fmt.Println(string(jsonBs))
+
+	// unarshal: JSONから構造体に変換
+	user2 := new(User)
+	if err := json.Unmarshal(jsonBs, &user2); err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(user2) // &{1 John john@example.com 2021-05-30 17:19:40.08609 +0900 JST {}}
+
+	// Marshalのカスタマイズ
+	customJsonBs, err := user1.CustomMarshalJson()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(customJsonBs)) // {"Id":1,"Name":"Mr John","Email":"john@example.com","CreatedAt":"2021-05-30T17:37:09.051518+09:00","A":{}}
 
 }
