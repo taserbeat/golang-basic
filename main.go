@@ -1,7 +1,9 @@
 package main
 
 import (
+	"crypto/md5"
 	"fmt"
+	"io"
 	"log"
 	"main/test"
 	"math"
@@ -205,5 +207,17 @@ func main() {
 
 	fs2 := re9.FindAllString("ABCXYZABCXYZ", -1) // 第2引数で取得する文字列スライスの数を指定する。-1を指定するとマッチした全てを取得する。
 	fmt.Println(fs2)                             // [ABCXYZ ABCXYZ]
+
+	/* cryptパッケージ */
+	// MD5ハッシュ値を生成
+	// 任意の文字列からMD5のハッシュ値を生成する処理例
+	hashGen := md5.New()
+	io.WriteString(hashGen, "ABCDE")
+
+	// ハッシュ値のバイト配列を取得する
+	fmt.Println(hashGen.Sum(nil)) // [46 205 222 57 89 5 29 145 63 97 177 69 121 234 19 109]
+
+	hashHex := fmt.Sprintf("%x", hashGen.Sum(nil)) // ハッシュ値のバイト配列 -> 16進数の文字列を得る
+	fmt.Println(hashHex)                           // 2ecdde3959051d913f61b14579ea136d
 
 }
