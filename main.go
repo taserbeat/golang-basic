@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"main/test"
 	"math"
 	"math/rand"
+	"net/http"
 	"net/url"
 	"os"
 	"regexp"
@@ -357,5 +359,38 @@ func main() {
 	encoder.RawQuery = q.Encode()
 
 	fmt.Println(encoder) // https://google.com?q=Golang
+
+	/* net/httpパッケージ (client) */
+	// HTTPクライアントのためのパッケージ
+
+	// GETメソッド
+	getResponse, _ := http.Get("https://example.com")
+
+	fmt.Println(getResponse.StatusCode) // 200
+	fmt.Println(getResponse.Proto)      // HTTP/2.0
+
+	fmt.Println(getResponse.Header["Date"])         // [Sun, 30 May 2021 11:43:51 GMT]
+	fmt.Println(getResponse.Header["Content-Type"]) // [text/html; charset=UTF-8]
+
+	fmt.Println(getResponse.Request.Method) // GET
+	fmt.Println(getResponse.Request.URL)    // https://example.com
+
+	body, _ := ioutil.ReadAll(getResponse.Body)
+	fmt.Println(string(body)) // HTTPレスポンスのbodyを文字列として出力
+
+	// POSTメソッド
+	values := url.Values{}
+
+	values.Add("id", "1")
+	values.Add("message", "メッセージ")
+	fmt.Println(values.Encode())
+
+	postResponse, err := http.PostForm("https://example.com/", values)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	postResponseBody, _ := ioutil.ReadAll(postResponse.Body)
+	fmt.Println(string(postResponseBody))
 
 }
