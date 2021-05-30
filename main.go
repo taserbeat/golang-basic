@@ -11,6 +11,7 @@ import (
 	"math/rand"
 	"os"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -44,6 +45,12 @@ func (user User) CustomMarshalJson() ([]byte, error) {
 	})
 
 	return v, err
+}
+
+/* sortパッケージ */
+type Entry struct {
+	Key   string
+	Value int
 }
 
 func main() {
@@ -281,5 +288,46 @@ func main() {
 	}
 
 	fmt.Println(string(customJsonBs)) // {"Id":1,"Name":"Mr John","Email":"john@example.com","CreatedAt":"2021-05-30T17:37:09.051518+09:00","A":{}}
+
+	/* sortパッケージ */
+	numbers := []int{5, 3, 7, 1, 6, 9, 2, 8, 4}
+	strings := []string{"j", "z", "a"}
+
+	fmt.Println(numbers, strings) // [5 3 7 1 6 9 2 8 4] [a z j]
+
+	sort.Ints(numbers)
+	sort.Strings(strings)
+
+	fmt.Println(numbers, strings) // [1 2 3 4 5 6 7 8 9] [a j z]
+
+	entries1 := []Entry{
+		{"A", 20},
+		{"J", 10},
+		{"n", 50},
+		{"I", 80},
+		{"t", 60},
+		{"B", 60},
+		{"E", 40},
+		{"p", 40},
+	}
+
+	entries2 := make([]Entry, len(entries1))
+	copy(entries2, entries1)
+
+	// Entry型のスライスをKeyでソート
+	fmt.Println("Entry型のスライスをKeyで降順ソート")
+	fmt.Println(entries1) // [{A 20} {J 10} {n 50} {I 80} {t 60} {B 60} {E 40} {p 40}]
+
+	sort.Slice(entries1, func(i, j int) bool { return entries1[i].Key < entries1[j].Key })
+
+	fmt.Println(entries1) // [{A 20} {B 60} {E 40} {I 80} {J 10} {n 50} {p 40} {t 60}]]
+
+	// Entry型のスライスをValueでStableSort (安定ソート)
+	fmt.Println("StableSort (安定ソート)")
+	fmt.Println(entries2) // [{A 20} {J 10} {n 50} {I 80} {t 60} {B 60} {E 40} {p 40}]
+
+	sort.SliceStable(entries2, func(i, j int) bool { return entries2[i].Value < entries2[j].Value })
+
+	fmt.Println(entries2) // [{J 10} {A 20} {E 40} {p 40} {n 50} {t 60} {B 60} {I 80}]
 
 }
