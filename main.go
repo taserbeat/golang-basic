@@ -17,6 +17,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"text/template"
 	"time"
 )
 
@@ -54,6 +55,21 @@ func (user User) CustomMarshalJson() ([]byte, error) {
 type Entry struct {
 	Key   string
 	Value int
+}
+
+/* net/http (server) */
+type MyHandler struct{}
+
+func (h *MyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, World!\n")
+}
+
+func top(w http.ResponseWriter, r *http.Request) {
+	t, err := template.ParseFiles("public/top.html")
+	if err != nil {
+		log.Println(err)
+	}
+	t.Execute(w, "this is top")
 }
 
 func main() {
@@ -392,5 +408,10 @@ func main() {
 
 	postResponseBody, _ := ioutil.ReadAll(postResponse.Body)
 	fmt.Println(string(postResponseBody))
+
+	/* net/http (server) */
+
+	http.HandleFunc("/top", top)      // curl http://localhost:8080/top   -> this is top
+	http.ListenAndServe(":8080", nil) // curl http://localhost:8080   -> 404
 
 }
