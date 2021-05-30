@@ -9,6 +9,7 @@ import (
 	"main/test"
 	"math"
 	"math/rand"
+	"net/url"
 	"os"
 	"regexp"
 	"sort"
@@ -332,5 +333,29 @@ func main() {
 
 	/* contextパッケージ */
 	// ある処理にかかる時間が長い場合に途中で処理を中断することを可能にする
+
+	/* net/urlパッケージ */
+	// URL文字列を処理するパッケージである。
+
+	// URLを解析
+	parser, _ := url.Parse("http://example.com/search?a=1&b=2#top")
+	fmt.Println(parser.Scheme)   // http
+	fmt.Println(parser.Host)     // example.com
+	fmt.Println(parser.Path)     // /search
+	fmt.Println(parser.RawQuery) // a=1&&b=2
+	fmt.Println(parser.Fragment) // top
+
+	fmt.Println(parser.Query()) // map[a:[1] b:[2]]
+
+	// URLを生成
+	encoder := &url.URL{}
+	encoder.Scheme = "https"
+	encoder.Host = "google.com"
+	q := encoder.Query()
+	q.Set("q", "Golang")
+
+	encoder.RawQuery = q.Encode()
+
+	fmt.Println(encoder) // https://google.com?q=Golang
 
 }
