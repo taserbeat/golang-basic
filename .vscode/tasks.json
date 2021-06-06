@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "run",
+            "label": "go:run",
             "type": "shell",
             "command": "GO111MODULE=on go run main.go",
         },
@@ -14,9 +14,29 @@
             "command": "GO111MODULE=on go test -v -cover ./...",
         },
         {
-          "label": "build",
+          "label": "go:build",
           "type": "shell",
           "command": "GO111MODULE=on go build -o opt/main",
-        }
+        },
+        {
+          "label": "compose:up",
+          "type": "shell",
+          "command": "docker-compose up -d --build",
+        },
+        {
+          "label": "compose:down",
+          "type": "shell",
+          "command": "docker-compose down --rmi all --volumes",
+        },
+        {
+          "label": "compose:reset",
+          "type": "shell",
+          "command": "docker-compose down --volumes && docker-compose up -d --build",
+        },
+        {
+          "label": "db:login",
+          "type": "shell",
+          "command": "psql -h localhost -p 15432 -U root -d test_db",
+        },
     ]
 }

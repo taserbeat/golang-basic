@@ -1,0 +1,26 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "db/sqlite",
+      "name": "db/sqlite"
+		},
+		{
+			"path": "db/postgres",
+      "name": "db/postgres"
+		},
+    {
+      "path": "ini",
+      "name": "ini"
+    },
+    {
+      "path": "uuid",
+      "name": "uuid"
+    }
+	],
+	"settings": {
+		"go.useLanguageServer": true
+	}
+}
